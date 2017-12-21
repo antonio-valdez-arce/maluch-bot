@@ -24,17 +24,15 @@ app.post('/listen', function (req, res, next) {
     return res.status(200).json(challenge);
   }
 
-  if (userName !== 'slackbot' && userName !== 'slack' && userName !== 'maluch' ) {
+  if (req.body.event.type === 'message' && typeof(req.body.event.user) !== 'undefined' ) {
 
     var messageUser = req.body.event.user;
+    var messageChannel = req.body.event.channel;
 
-    var requestData = { "text": messageUser };
+    var requestData = { "text": `Woof Woof! ${messageChannel}`};
     var url = 'https://hooks.slack.com/services/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';
 
-    
-
     console.log(req.body);
-    console.log(messageUser);
   
     request({
       url: url,
