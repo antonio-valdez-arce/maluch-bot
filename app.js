@@ -1,6 +1,9 @@
 var express = require('express');
 var bodyParser = require('body-parser');
+var querystring = require('querystring');
+var http = require('http');
 var app = express();
+var request = require("request");
 
 var port = process.env.PORT || 8080;
 
@@ -20,29 +23,31 @@ app.post('/listen', function (req, res, next) {
     var challenge = {challenge: req.body.challenge}
     return res.status(200).json(challenge);
   }
-  
-  var post_data = querystring.stringify({
-      'text' : 'Woof woof woof!'
-  });
-  
-  var post_options = {
-      host: 'hooks.slack.com',
-      port: '80',
-      path: '/services/T3ZEF9U2D/B8HD54588/ehLb3IUvhH8OgbrOFn7Y8quS',
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Content-Length': Buffer.byteLength(post_data)
-      }
-  };
 
   if (userName !== 'slackbot') {
-    var post_req = http.request(post_options);
 
-    // post the data
-    post_req.write(post_data);
-    post_req.end();
+    var requestData = { "text": "Woof woof woof!" };
+    var url = 'https://hooks.slack.com/services/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';
+  
+    request({
+      url: url,
+      json: requestData,
+      method: "POST",
+      }, function (error, response, body) {
+          if (!error && response.statusCode === 200) {
+              console.log(body)
+              return res.status(200).end();
+          }
+          else {
+              console.log("error: " + error)
+              console.log("response.statusCode: " + response.statusCode)
+              console.log("response.statusText: " + response.statusText)
+              return res.status(500).end();
+          }
+      });
+  
   } else {
+    console.log('NOTOK END');
     return res.status(200).end();
   }
 });
