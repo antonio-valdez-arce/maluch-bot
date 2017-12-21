@@ -26,25 +26,31 @@ app.post('/listen', function (req, res, next) {
 
   if (userName !== 'slackbot' && userName !== 'slack' && userName !== 'maluch' ) {
 
-    var requestData = { "text": "Woof woof woof!" };
+    var messageUser = req.body.event.user;
+    var requestData = { "text": messageUser };
     var url = 'https://hooks.slack.com/services/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';
+
+    
+
+    console.log(req.body);
+    console.log(messageUser);
   
-    // request({
-    //   url: url,
-    //   json: requestData,
-    //   method: "POST",
-    //   }, function (error, response, body) {
-    //       if (!error && response.statusCode === 200) {
-    //           console.log(body)
-    //           return res.status(200).end();
-    //       }
-    //       else {
-    //           console.log("error: " + error)
-    //           console.log("response.statusCode: " + response.statusCode)
-    //           console.log("response.statusText: " + response.statusText)
-    //           return res.status(500).end();
-    //       }
-    //   });
+    request({
+      url: url,
+      json: requestData,
+      method: "POST",
+      }, function (error, response, body) {
+          if (!error && response.statusCode === 200) {
+              console.log(body)
+              return res.status(200).end();
+          }
+          else {
+              console.log("error: " + error)
+              console.log("response.statusCode: " + response.statusCode)
+              console.log("response.statusText: " + response.statusText)
+              return res.status(500).end();
+          }
+      });
   
   } else {
     return res.status(200).end();
