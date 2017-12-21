@@ -1,0 +1,13 @@
+{
+  "name": "MaluchBot",
+  "version": "0.0.1",
+  "description": "Maluch Bot for Slack",
+  "main": "app.js",
+  "author": "Antonio Valdez Arce",
+  "license": "",
+  "dependencies": {
+    "express": "^4.x.x",
+    "body-parser": "^1.x.x",
+    "request": "2.56.x"
+  }
+}
