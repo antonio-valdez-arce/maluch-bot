@@ -2,6 +2,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
  
 var app = express();
+var port = process.env.PORT || 1337;
 
 // body parser
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -22,4 +23,8 @@ app.post('/listen', function (req, res, next) {
   } else {
     return res.status(200).end();
   }
+});
+
+app.listen(port, function () {
+  console.log('Listening on port ' + port);
 });
