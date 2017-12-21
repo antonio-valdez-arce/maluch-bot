@@ -8,11 +8,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', function (req, res) { res.status(200).send('Woof Woof!'); });
 
-app.post('/', function (req, res, next) {
+app.get('/listen', function (req, res) { res.status(200).send('Woof Woof!'); });
+
+app.post('/listen', function (req, res, next) {
   var userName = req.body.user_name;
   
   var botPayload = {
-    text : 'Woof Woof Woof!'
+    text: 'Woof Woof Woof!'
   };
 
   if (userName !== 'slackbot') {
