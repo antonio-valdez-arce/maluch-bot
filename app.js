@@ -27,7 +27,9 @@ app.post('/listen', function (req, res, next) {
   if (userName !== 'slackbot' && userName !== 'slack' && userName !== 'maluch' ) {
 
     var messageUser = req.body.event.user;
-    var requestData = { "text": messageUser };
+    var messageText = req.body.event.text;
+
+    var requestData = { "text": messageUser + ' ' + messageText };
     var url = 'https://hooks.slack.com/services/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';
 
     
