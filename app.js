@@ -30,7 +30,7 @@ app.post('/listen', function (req, res, next) {
     var messageChannel = req.body.event.channel;
 
     var requestData = { "text": `Woof Woof! ${messageChannel}`};
-    var url = 'https://hooks.slack.com/services/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';
+    var url = process.env.SLACK_WEBHOOK_URL || 'https://hooks.slack.com/services/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';
 
     console.log(req.body);
   
