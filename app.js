@@ -27,8 +27,11 @@ app.post('/listen', function (req, res, next) {
   var eventType = req.body.event.type;
   var messageUser = req.body.event.user || false;
   var messageChannel = req.body.event.channel;
-  var allowedChannels = ['D40K69CQ5']
-  
+  /**
+   * #lunch: C7G1HCN0Z
+   * @antonio: D40K69CQ5
+   */
+  var allowedChannels = ['C7G1HCN0Z'];
 
   if (messageUser && eventType === 'message' && allowedChannels.indexOf(messageChannel) > -1 ) {
 
@@ -42,12 +45,17 @@ app.post('/listen', function (req, res, next) {
       'Good bye', 'good bye',
       'Bye bye', 'bye bye', 'Bye', 'bye'
     ];
+    var lunchKeywords = ['Lunch', 'lunch', 'Lunch?', 'lunch?', 'Food', 'food'];
 
     if (keyWords.indexOf(messageText) < 0 ) {
       return res.status(200).end();
     }
 
-    var requestData = { "text": 'Woof Woof woof!'};
+    var requestData = { "text": 'Woof woof woof! :maluch_face: woof!'};
+    if (lunchKeywords.indexOf(messageText) > -1 ) {
+      var requestData = { "text": ':hotdog::pizza::taco::poultry_leg::hamburger::cake:... woof?'};
+    }
+
     var url = process.env.SLACK_WEBHOOK_URL;
 
     request({
