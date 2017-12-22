@@ -24,16 +24,32 @@ app.post('/listen', function (req, res, next) {
     return res.status(200).json(challenge);
   }
 
-  if (req.body.event.type === 'message' && typeof(req.body.event.user) !== 'undefined' ) {
-
-    var messageUser = req.body.event.user;
-    var messageChannel = req.body.event.channel;
-
-    var requestData = { "text": `Woof Woof! ${messageChannel}`};
-    var url = process.env.SLACK_WEBHOOK_URL || 'https://hooks.slack.com/services/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';
-
-    console.log(req.body);
+  var eventType = req.body.event.type;
+  var messageUser = req.body.event.user || false;
+  var messageChannel = req.body.event.channel;
+  var allowedChannels = ['D40K69CQ5']
   
+
+  if (messageUser && eventType === 'message' && allowedChannels.indexOf(messageChannel) > -1 ) {
+
+    var messageText = req.body.event.text;
+    var keyWords = [
+      'Food', 'food',
+      'Lunch', 'lunch', 'Lunch?', 'lunch?',
+      'Thanks', 'thanks',
+      'Thank you', 'thank you',
+      'Maluch', 'maluch',
+      'Good bye', 'good bye',
+      'Bye bye', 'bye bye', 'Bye', 'bye'
+    ];
+
+    if (keyWords.indexOf(messageText) < 0 ) {
+      return res.status(200).end();
+    }
+
+    var requestData = { "text": 'Woof Woof woof!'};
+    var url = process.env.SLACK_WEBHOOK_URL;
+
     request({
       url: url,
       json: requestData,
