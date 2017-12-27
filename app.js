@@ -1,66 +1,69 @@
-var express = require('express');
-var bodyParser = require('body-parser');
-var querystring = require('querystring');
-var http = require('http');
-var app = express();
-var request = require("request");
+const express = require('express');
+const bodyParser = require('body-parser');
+const querystring = require('querystring');
+const http = require('http');
+const app = express();
+const request = require("request");
 
-var port = process.env.PORT || 8080;
+const port = process.env.PORT || 8080;
+
+const barkAtKeywords = [
+  'food',
+  'lunch', 
+  'thanks',
+  'thank',
+  'maluch', 
+  'bye'
+];
+
+const lunchKeywords = ['lunch', 'food'];
+
+function shouldBark(word) {
+  return barkAtKeywords.includes(word.toLowerCase());
+}
 
 // body parser
 app.use(bodyParser.json());
 
 app.get('/', function (req, res) { res.status(200).send('Woof Woof!'); });
-
-app.get('/listen', function (req, res) { res.status(200).send('Woof Woof!'); });
-
 app.post('/listen', function (req, res, next) {
   
-  var reqType = req.body.type;
-  var userName = req.body.user_name;
+  const reqType = req.body.type;
+  const userName = req.body.user_name;
   
   if (reqType === 'url_verification') {
-    var challenge = {challenge: req.body.challenge}
+    const challenge = {challenge: req.body.challenge}
     return res.status(200).json(challenge);
   }
 
-  var eventType = req.body.event.type;
-  var messageUser = req.body.event.user || false;
-  var messageChannel = req.body.event.channel;
+  const eventType = req.body.event.type;
+  const messageUser = req.body.event.user || false;
+  const messageChannel = req.body.event.channel;
   /**
    * #lunch: C7G1HCN0Z
    * @antonio: D40K69CQ5
    */
-  var allowedChannels = ['C7G1HCN0Z'];
+  const allowedChannels = ['C7G1HCN0Z'];
 
   if (messageUser && eventType === 'message' && allowedChannels.indexOf(messageChannel) > -1 ) {
 
-    var messageText = req.body.event.text;
-    var keyWords = [
-      'Food', 'food',
-      'Lunch', 'lunch', 'Lunch?', 'lunch?',
-      'Thanks', 'thanks',
-      'Thank you', 'thank you',
-      'Maluch', 'maluch',
-      'Good bye', 'good bye',
-      'Bye bye', 'bye bye', 'Bye', 'bye'
-    ];
-    var lunchKeywords = ['Lunch', 'lunch', 'Lunch?', 'lunch?', 'Food', 'food'];
-
-    if (keyWords.indexOf(messageText) < 0 ) {
+    const messageText = req.body.event.text;
+    const barkAtWord = messageText.split(/[ ,?!]+/).find(shouldBark);
+    
+    if (!barkAtWord) {
       return res.status(200).end();
     }
-
-    var requestData = { "text": 'Woof woof woof! :maluch_face: woof!'};
-    if (lunchKeywords.indexOf(messageText) > -1 ) {
-      var requestData = { "text": ':hotdog::pizza::taco::poultry_leg::hamburger::cake:... woof?'};
+    
+    let woof = 'Woof woof woof! :maluch_face: woof!';
+    if (lunchKeywords.includes(barkAtWord)) {
+      woof = ':hotdog::pizza::taco::poultry_leg::hamburger::cake:... woof?';
     }
 
-    var url = process.env.SLACK_WEBHOOK_URL;
+    const url = process.env.SLACK_WEBHOOK_URL;
 
     request({
       url: url,
-      json: requestData,
+      json: { "text": woof },
       method: "POST",
       }, function (error, response, body) {
           if (!error && response.statusCode === 200) {
