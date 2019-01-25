@@ -13,10 +13,12 @@ const barkAtKeywords = [
   'thanks',
   'thank',
   'maluch', 
-  'bye'
+  'bye',
+  'merci',
+  'gracias'
 ];
 
-const lunchKeywords = ['lunch', 'food'];
+const lunchKeywords = ['lunch', 'food', 'eat'];
 
 function shouldBark(word) {
   return barkAtKeywords.includes(word.toLowerCase());
