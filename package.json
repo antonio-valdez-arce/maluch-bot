@@ -6,8 +6,8 @@
   "author": "Antonio Valdez Arce",
   "license": "",
   "dependencies": {
-    "express": "^4.x.x",
-    "body-parser": "^1.x.x",
-    "request": "2.56.x"
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "request": "^2.88.0"
   }
 }
